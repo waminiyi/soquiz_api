@@ -1,4 +1,4 @@
-package com.soquiz.plugins
+package com.soquiz.plugins.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

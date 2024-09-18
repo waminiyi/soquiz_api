@@ -1,6 +1,6 @@
 package com.soquiz
 
-import com.soquiz.plugins.*
+import com.soquiz.plugins.routing.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
