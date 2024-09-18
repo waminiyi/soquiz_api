@@ -65,6 +65,7 @@ fun Application.registerUserRoutes() {
 
             route("/admin/setRole") {
                 post {
+
                     val principal = call.principal<JWTPrincipal>()
                     val role = principal?.getClaim("role", String::class)
 

@@ -1,5 +1,6 @@
 package com.soquiz.plugins.routing
 
+import com.soquiz.plugins.routing.routes.registerCategoryRoutes
 import com.soquiz.plugins.routing.routes.registerUserRoutes
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -15,6 +16,7 @@ fun Application.configureRouting() {
     }
 
     registerUserRoutes()
+    registerCategoryRoutes()
     routing {
         get("/") {
             call.respondText("Hello World!")

@@ -1,5 +1,6 @@
 package com.soquiz.plugins
 
+import com.soquiz.database.tables.CategoriesTable
 import com.soquiz.database.tables.UsersTable
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
@@ -25,7 +26,8 @@ fun Application.configureDatabases() {
 fun Application.initializeDatabase() {
     transaction {
         SchemaUtils.create(
-            UsersTable
+            UsersTable,
+            CategoriesTable
         )
     }
 }
