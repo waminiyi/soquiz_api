@@ -11,13 +11,13 @@ import io.ktor.server.routing.*
 fun RoutingCall.isAdminCall(): Boolean {
     val principal = this.principal<JWTPrincipal>()
     val role = principal?.getClaim(ROLE, String::class)
-    return role == Role.ADMIN.name
+    return role == Role.admin.name
 }
 
 fun RoutingCall.isEditorCall(): Boolean {
     val principal = this.principal<JWTPrincipal>()
     val role = principal?.getClaim(ROLE, String::class)
-    return role == Role.EDITOR.name
+    return role == Role.editor.name
 }
 
 suspend fun RoutingCall.respondForbidden() =

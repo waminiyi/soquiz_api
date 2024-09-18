@@ -17,7 +17,7 @@ class UserRepository {
             name = user.name
             email = user.email
             password = hashPassword(user.password)
-            role = Role.USER.name
+            role = Role.user.name
         }
     }
 
