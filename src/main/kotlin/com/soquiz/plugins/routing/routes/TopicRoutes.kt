@@ -4,6 +4,8 @@ import com.soquiz.database.mapping.toTopic
 import com.soquiz.database.repositories.TopicRepository
 import com.soquiz.models.Topic
 import com.soquiz.models.TopicWithCategory
+import com.soquiz.utils.isAdminCall
+import com.soquiz.utils.isEditorCall
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
@@ -31,7 +33,6 @@ fun Application.registerTopicRoutes() {
                 }
 
                 try {
-
                     val topics = repository.allTopicsByCategory(categoryId)
                     if (topics.isEmpty()) {
                         call.respond(HttpStatusCode.NotFound, "Category not found")
@@ -45,10 +46,7 @@ fun Application.registerTopicRoutes() {
             }
             authenticate("auth-jwt") {
                 post {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@post
                     }
@@ -69,10 +67,7 @@ fun Application.registerTopicRoutes() {
                 }
 
                 put("{topicId}") {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@put
                     }
@@ -90,10 +85,7 @@ fun Application.registerTopicRoutes() {
                 }
 
                 delete("{topicId}") {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@delete
                     }

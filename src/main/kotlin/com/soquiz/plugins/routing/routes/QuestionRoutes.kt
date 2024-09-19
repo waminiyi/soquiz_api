@@ -6,6 +6,8 @@ import com.soquiz.models.Difficulty
 import com.soquiz.models.Language
 import com.soquiz.models.QuestionUpdate
 import com.soquiz.models.QuestionWithDetails
+import com.soquiz.utils.isAdminCall
+import com.soquiz.utils.isEditorCall
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
@@ -59,10 +61,7 @@ fun Application.registerQuestionRoutes() {
 
             authenticate("auth-jwt") {
                 post {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@post
                     }
@@ -80,10 +79,7 @@ fun Application.registerQuestionRoutes() {
                 }
 
                 patch("/{id}") {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@patch
                     }
@@ -108,10 +104,7 @@ fun Application.registerQuestionRoutes() {
             }
 
             delete("{topicId}") {
-                val principal = call.principal<JWTPrincipal>()
-                val role = principal?.getClaim("role", String::class)
-
-                if (role != "admin" && role != "editor") {
+                if (!call.isAdminCall() && !call.isEditorCall()) {
                     call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                     return@delete
                 }

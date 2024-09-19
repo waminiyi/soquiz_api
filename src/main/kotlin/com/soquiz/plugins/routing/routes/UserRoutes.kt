@@ -6,11 +6,11 @@ import com.soquiz.models.RegisterUser
 import com.soquiz.models.UserRole
 import com.soquiz.plugins.security.generateToken
 import com.soquiz.utils.checkPassword
+import com.soquiz.utils.isAdminCall
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -66,10 +66,7 @@ fun Application.registerUserRoutes() {
             route("/admin/setRole") {
                 post {
 
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin") {
+                    if (!call.isAdminCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@post
                     }

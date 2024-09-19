@@ -3,6 +3,8 @@ package com.soquiz.plugins.routing.routes
 import com.soquiz.database.mapping.toCategory
 import com.soquiz.database.repositories.CategoryRepository
 import com.soquiz.models.Category
+import com.soquiz.utils.isAdminCall
+import com.soquiz.utils.isEditorCall
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
@@ -25,7 +27,7 @@ fun Application.registerCategoryRoutes() {
                     val principal = call.principal<JWTPrincipal>()
                     val role = principal?.getClaim("role", String::class)
 
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@post
                     }
@@ -41,12 +43,8 @@ fun Application.registerCategoryRoutes() {
                     }
                 }
 
-                // Admin or Editor can update a category
                 put("{categoryId}") {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@put
                     }
@@ -64,10 +62,7 @@ fun Application.registerCategoryRoutes() {
                 }
 
                 delete("{categoryId}") {
-                    val principal = call.principal<JWTPrincipal>()
-                    val role = principal?.getClaim("role", String::class)
-
-                    if (role != "admin" && role != "editor") {
+                    if (!call.isAdminCall() && !call.isEditorCall()) {
                         call.respond(HttpStatusCode.Forbidden, "You do not have permission to perform this action.")
                         return@delete
                     }
