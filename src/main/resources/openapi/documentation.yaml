@@ -4,7 +4,7 @@ info:
   description: "A REST API for managing quizzes, questions, categories, and topics."
   version: 1.0.0
 servers:
-- url: https://api.soquizz.com/v1
+- url: https://www.soquiz.sotopatrick.com
   description: Production Server
 - url: http://localhost:8080
   description: Local Development Server
