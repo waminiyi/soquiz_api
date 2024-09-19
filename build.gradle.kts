@@ -1,7 +1,7 @@
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.ktor)
+    kotlin("jvm") version "2.0.20"
+    id("io.ktor.plugin") version "3.0.0-rc-1"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
 }
 
@@ -20,20 +20,23 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.ktor.server.core)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.server.content.negotiation)
-    implementation(libs.postgresql)
-    implementation(libs.h2)
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.jdbc)
-    implementation(libs.ktor.server.host.common)
-    implementation(libs.ktor.server.status.pages)
-    implementation(libs.ktor.server.auth)
-    implementation(libs.ktor.server.auth.jwt)
-    implementation(libs.ktor.server.netty)
-    implementation(libs.logback.classic)
-    implementation(libs.ktor.server.config.yaml)
+    implementation("io.ktor:ktor-server-core-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-host-common-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-status-pages-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-auth-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-auth-jwt-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-netty-jvm:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-config-yaml:3.0.0-rc-1")
+    implementation("io.ktor:ktor-server-test-host-jvm:3.0.0-rc-1")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+    implementation("org.postgresql:postgresql:42.5.1")
+    implementation("com.h2database:h2:2.2.224")
+    implementation("org.jetbrains.exposed:exposed-core:0.53.0")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.53.0")
+
+
 
     implementation("org.jetbrains.exposed:exposed-dao:0.53.0")
     implementation("org.mindrot:jbcrypt:0.4")
