@@ -1,8 +1,5 @@
 package com.soquiz.models
 
-import com.soquiz.models.Difficulty
-import com.soquiz.models.Language
-import com.soquiz.models.Proposition
 import kotlinx.serialization.Serializable
 
 @Serializable

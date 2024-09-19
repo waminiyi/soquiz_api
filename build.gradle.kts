@@ -37,6 +37,8 @@ dependencies {
 
     implementation("org.jetbrains.exposed:exposed-dao:0.53.0")
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation("io.ktor:ktor-server-swagger: 2.3.12")
+
 
 
     testImplementation(libs.ktor.server.test.host)

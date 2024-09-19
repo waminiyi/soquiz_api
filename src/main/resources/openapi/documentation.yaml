@@ -1,0 +1,592 @@
+openapi: 3.0.0
+info:
+  title: SoQuizz API
+  description: "A REST API for managing quizzes, questions, categories, and topics."
+  version: 1.0.0
+servers:
+- url: https://api.soquizz.com/v1
+  description: Production Server
+- url: http://localhost:8080
+  description: Local Development Server
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+        required: true
+      responses:
+        "201":
+          description: User created successfully
+        "500":
+          description: Internal server error
+  /auth/login:
+    post:
+      summary: Login a user and generate JWT token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+        required: true
+      responses:
+        "200":
+          description: JWT token generated successfully
+        "401":
+          description: Invalid credentials
+  /admin/setRole:
+    post:
+      summary: Set role for an existing user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRole'
+        required: true
+      responses:
+        "200":
+          description: User role updated successfully
+        "403":
+          description: "Forbidden, only admin can assign roles"
+        "404":
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/v1/categories:
+    get:
+      summary: Get all categories
+      operationId: getAllCategories
+      responses:
+        "200":
+          description: A list of all categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    post:
+      summary: Create a new category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "201":
+          description: Category created successfully
+        "403":
+          description: Forbidden - Only admin or editor can create a category
+        "400":
+          description: Bad Request - Invalid input
+      security:
+      - bearerAuth: []
+  /api/v1/categories/{categoryId}:
+    put:
+      summary: Update a category
+      parameters:
+      - name: categoryId
+        in: path
+        description: The ID of the category to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "200":
+          description: Category updated successfully
+        "403":
+          description: Forbidden - Only admin or editor can update a category
+        "404":
+          description: Not Found - Category not found
+        "400":
+          description: Bad Request - Invalid input
+      security:
+      - bearerAuth: []
+    delete:
+      summary: Delete a category
+      parameters:
+      - name: categoryId
+        in: path
+        description: The ID of the category to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Category deleted successfully
+        "403":
+          description: Forbidden - Only admin or editor can delete a category
+        "404":
+          description: Not Found - Category not found
+        "400":
+          description: Bad Request - Invalid input
+      security:
+      - bearerAuth: []
+  /api/v1/topics:
+    get:
+      summary: Get all topics
+      operationId: getAllTopics
+      responses:
+        "200":
+          description: A list of all topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+    post:
+      summary: Create a new topic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicWithCategory'
+        required: true
+      responses:
+        "201":
+          description: Topic created successfully
+        "403":
+          description: Forbidden - Only admin or editor can create a topic
+        "404":
+          description: Not Found - The topic's category doesn't exist
+        "400":
+          description: Bad Request - Invalid input
+      security:
+      - bearerAuth: []
+  /api/v1/topics/byCategory/{categoryId}:
+    get:
+      summary: Get all topics by category
+      operationId: getTopicsByCategory
+      parameters:
+      - name: categoryId
+        in: path
+        description: The ID of the category to retrieve topics for
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A list of topics for the given category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+        "400":
+          description: Bad Request - Missing or invalid category ID
+        "404":
+          description: Not Found - Category not found
+        "500":
+          description: Internal Server Error - An unexpected error occurred
+  /api/v1/topics/{topicId}:
+    put:
+      summary: Update a topic
+      parameters:
+      - name: topicId
+        in: path
+        description: The ID of the topic to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Topic'
+        required: true
+      responses:
+        "200":
+          description: Topic updated successfully
+        "403":
+          description: Forbidden - Only admin or editor can update a topic
+        "404":
+          description: Not Found - Topic not found
+        "400":
+          description: Bad Request - Invalid input
+      security:
+      - bearerAuth: []
+    delete:
+      summary: Delete a topic
+      parameters:
+      - name: topicId
+        in: path
+        description: The ID of the topic to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Topic deleted successfully
+        "403":
+          description: Forbidden - Only admin or editor can delete a topic
+        "404":
+          description: Not Found - Topic not found
+        "400":
+          description: Bad Request - Invalid input
+      security:
+      - bearerAuth: []
+  /api/v1/quiz:
+    get:
+      summary: Get a list of quiz questions
+      parameters:
+      - name: limit
+        in: query
+        description: Number of questions to retrieve (default is 5)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: language
+        in: query
+        description: Language of the questions (default is 'en')
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - fr
+          - en
+          - it
+          - nl
+          - de
+          - es
+      - name: category
+        in: query
+        description: The category ID of the questions
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: topic
+        in: query
+        description: The topic ID of the questions
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: difficulty
+        in: query
+        description: Difficulty level of the questions
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - débutant
+          - confirmé
+          - expert
+      responses:
+        "200":
+          description: A list of quiz questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestionWithDetails'
+        "400":
+          description: Invalid query parameters
+    post:
+      summary: Create a new question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionWithDetails'
+        required: true
+      responses:
+        "201":
+          description: Question created successfully
+        "400":
+          description: Invalid input
+        "403":
+          description: Forbidden - Only admins or editors can create questions
+      security:
+      - bearerAuth: []
+  /api/v1/quiz/{id}:
+    get:
+      summary: Get a specific question by ID
+      parameters:
+      - name: id
+        in: path
+        description: The unique ID of the question
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The requested question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionWithDetails'
+        "400":
+          description: Missing or invalid question ID
+        "404":
+          description: Question not found
+    delete:
+      summary: Delete a question
+      parameters:
+      - name: id
+        in: path
+        description: The unique ID of the question to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Question deleted successfully
+        "400":
+          description: Missing or invalid question ID
+        "403":
+          description: Forbidden - Only admins or editors can delete questions
+        "404":
+          description: Question not found
+      security:
+      - bearerAuth: []
+    patch:
+      summary: Update a question
+      parameters:
+      - name: id
+        in: path
+        description: The unique ID of the question to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionUpdate'
+        required: true
+      responses:
+        "200":
+          description: Question updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionWithDetails'
+        "400":
+          description: Invalid input or missing question ID
+        "403":
+          description: Forbidden - Only admins or editors can update questions
+        "404":
+          description: Question not found
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    RegisterUser:
+      required:
+      - email
+      - name
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of the user
+        email:
+          type: string
+          description: Email of the user
+          format: email
+        password:
+          type: string
+          description: Plain text password of the user
+    LoginUser:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email of the user
+          format: email
+        password:
+          type: string
+          description: Plain text password of the user
+    UserRole:
+      required:
+      - email
+      - role
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email of the user
+          format: email
+        role:
+          type: string
+          description: Role to assign to the user
+          enum:
+          - admin
+          - editor
+          - user
+    Category:
+      required:
+      - categoryId
+      - name
+      type: object
+      properties:
+        categoryId:
+          type: string
+          description: The unique ID of the category
+        name:
+          type: string
+          description: The name of the category
+    Topic:
+      required:
+      - topicId
+      - topicName
+      type: object
+      properties:
+        topicId:
+          type: string
+          description: The unique ID of the topic
+        topicName:
+          type: string
+          description: The name of the topic
+    TopicWithCategory:
+      required:
+      - categoryId
+      - name
+      - topicId
+      type: object
+      properties:
+        categoryId:
+          type: string
+          description: The ID of the category this topic belongs to
+        topicId:
+          type: string
+          description: The unique ID of the topic
+        name:
+          type: string
+          description: The name of the
+    QuestionWithDetails:
+      required:
+      - categoryId
+      - difficulty
+      - language
+      - propositions
+      - questionId
+      - questionText
+      - topicId
+      type: object
+      properties:
+        questionId:
+          type: string
+          description: The unique ID of the question
+        categoryId:
+          type: string
+          description: The ID of the question's category
+        topicId:
+          type: string
+          description: The ID of the question's topic
+        language:
+          type: string
+          description: The language of the question
+          enum:
+          - fr
+          - en
+          - it
+          - nl
+          - de
+          - es
+        difficulty:
+          type: string
+          description: The difficulty level of the question
+          enum:
+          - débutant
+          - confirmé
+          - expert
+        questionText:
+          type: string
+          description: The question text
+        propositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposition'
+    QuestionUpdate:
+      type: object
+      properties:
+        categoryId:
+          type: string
+          description: The updated category ID
+        topicId:
+          type: string
+          description: The updated topic ID
+        language:
+          type: string
+          description: The updated language of the question
+          enum:
+          - fr
+          - en
+          - it
+          - nl
+          - de
+          - es
+        difficulty:
+          type: string
+          description: The updated difficulty level
+          enum:
+          - débutant
+          - confirmé
+          - expert
+        questionText:
+          type: string
+          description: The updated question text
+        propositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposition'
+    Proposition:
+      required:
+      - isCorrect
+      - text
+      type: object
+      properties:
+        text:
+          type: string
+          description: The proposition text
+        isCorrect:
+          type: boolean
+          description: Whether the proposition is the correct answer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
