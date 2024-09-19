@@ -42,15 +42,4 @@ dependencies {
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("io.ktor:ktor-server-swagger: 2.3.12")
 
-
-
-    testImplementation(libs.ktor.server.test.host)
-    testImplementation(libs.kotlin.test.junit)
-}
-
-tasks.withType<JavaExec> {
-    environment("POSTGRES_USER", System.getenv("POSTGRES_USER"))
-    environment("POSTGRES_PASSWORD", System.getenv("POSTGRES_PASSWORD"))
-    environment("POSTGRES_URL", System.getenv("POSTGRES_URL"))
-    environment("JWT_SECRET", System.getenv("JWT_SECRET"))
 }
