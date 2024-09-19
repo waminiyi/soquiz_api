@@ -8,9 +8,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureDatabases() {
 
-    val url = environment.config.property("postgres.url").getString()
-    val user = environment.config.property("postgres.user").getString()
-    val password = environment.config.property("postgres.password").getString()
+    val url = System.getenv("POSTGRES_URL")
+    val user = System.getenv("POSTGRES_USER")
+    val password = System.getenv("POSTGRES_PASSWORD")
     val driver = environment.config.property("postgres.driver").getString()
 
     Database.connect(

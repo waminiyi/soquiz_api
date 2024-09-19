@@ -4,14 +4,15 @@ ktor:
       - com.soquiz.ApplicationKt.module
   deployment:
     port: 8080
+
 jwt:
-  secret: ${JWT_SECRET}
+  secret: $JWT_SECRET
   issuer: "https://www.soquizz.sotopatrick.com/"
   audience: "https://www.soquizz.sotopatrick.com/"
   realm: "SoQuiz Api"
 
 postgres:
-  url: ${POSTGRES_URL}
-  user: ${POSTGRES_USER}
-  password: ${POSTGRES_PASSWORD}
+  url: "USE_ENV_VARIABLE"
+  user: "USE_ENV_VARIABLE"
+  password: "USE_ENV_VARIABLE"
   driver: "org.postgresql.Driver"

@@ -16,7 +16,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.registerUserRoutes() {
-    val secretKey = environment.config.property("jwt.secret").getString()
+    val secretKey = System.getenv("JWT_SECRET")
     val audience = environment.config.property("jwt.audience").getString()
     val issuer = environment.config.property("jwt.issuer").getString()
 

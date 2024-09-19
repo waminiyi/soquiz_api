@@ -10,12 +10,19 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 fun Application.configureSecurity() {
-    val secretKey = environment.config.property("jwt.secret").getString()
+    val secretKey = System.getenv("JWT_SECRET")
     val audience = environment.config.property("jwt.audience").getString()
     val issuer = environment.config.property("jwt.issuer").getString()
     val realmText = environment.config.property("jwt.realm").getString()
 
     install(Authentication) {
+        println("POSTGRES_USER: ${System.getenv("POSTGRES_USER")}")
+        println("POSTGRES_URL: ${System.getenv("POSTGRES_URL")}")
+
+        println("POSTGRES_PASS: ${System.getenv("POSTGRES_PASSWORD")}")
+
+        println("JWT: ${System.getenv("JWT_SECRET")}")
+
         jwt("auth-jwt") {
             realm = realmText
             verifier(
