@@ -1,8 +1,12 @@
+import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 
 plugins {
     kotlin("jvm") version "2.0.20"
     id("io.ktor.plugin") version "3.0.0-rc-1"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
+    id("com.gradleup.shadow") version "8.3.1"
+    id("com.google.cloud.tools.appengine") version "2.8.0"
+
 }
 
 group = "com.soquiz"
@@ -17,6 +21,16 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+configure<AppEngineAppYamlExtension> {
+    stage {
+        setArtifact("build/libs/${project.name}-all.jar")
+    }
+    deploy {
+        version = "GCLOUD_CONFIG"
+        projectId = "GCLOUD_CONFIG"
+    }
 }
 
 dependencies {

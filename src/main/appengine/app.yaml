@@ -1,0 +1,13 @@
+runtime: java21
+entrypoint: 'java -jar com.soquiz.server-all.jar'
+
+handlers:
+  - url: /.*
+    script: this.directory.does.not.exist
+    secure: always
+
+env_variables:
+  JWT_SECRET: {{JWT_SECRET}}
+  POSTGRES_URL: {{POSTGRES_URL}}
+  POSTGRES_USER: {{POSTGRES_USER}}
+  POSTGRES_PASSWORD: {{POSTGRES_PASSWORD}}
