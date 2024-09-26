@@ -23,6 +23,10 @@ jobs:
       - name: Build the project
         run: ./gradlew clean build shadowJar
 
+      - name: List build artifacts
+        run: ls -lh build/libs/
+
+
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
