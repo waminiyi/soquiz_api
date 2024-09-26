@@ -16,12 +16,6 @@ fun Application.configureSecurity() {
     val realmText = environment.config.property("jwt.realm").getString()
 
     install(Authentication) {
-        println("POSTGRES_USER: ${System.getenv("POSTGRES_USER")}")
-        println("POSTGRES_URL: ${System.getenv("POSTGRES_URL")}")
-
-        println("POSTGRES_PASS: ${System.getenv("POSTGRES_PASSWORD")}")
-
-        println("JWT: ${System.getenv("JWT_SECRET")}")
 
         jwt("auth-jwt") {
             realm = realmText

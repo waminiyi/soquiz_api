@@ -6,6 +6,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
     id("com.gradleup.shadow") version "8.3.1"
     id("com.google.cloud.tools.appengine") version "2.8.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+
 
 }
 
