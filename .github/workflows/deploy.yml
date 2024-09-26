@@ -26,6 +26,13 @@ jobs:
       - name: List build artifacts
         run: ls -lh build/libs/
 
+      - name: Log environment variables
+        run: |
+          echo "JWT_SECRET: $JWT_SECRET"
+          echo "POSTGRES_URL: $POSTGRES_URL"
+          echo "POSTGRES_USER: $POSTGRES_USER"
+          echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
+
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
