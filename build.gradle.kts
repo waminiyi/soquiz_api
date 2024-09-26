@@ -27,23 +27,11 @@ repositories {
 
 configure<AppEngineAppYamlExtension> {
     stage {
-        setArtifact("build/libs/soquiz-all.jar")
+        setArtifact("build/libs/${project.name}-all.jar")
     }
     deploy {
         version = "GCLOUD_CONFIG"
         projectId = "GCLOUD_CONFIG"
-    }
-}
-
-tasks {
-    shadowJar {
-        archiveBaseName.set("soquiz")
-        archiveClassifier.set("all")
-        archiveVersion.set("")
-    }
-
-    build {
-        dependsOn(shadowJar)
     }
 }
 

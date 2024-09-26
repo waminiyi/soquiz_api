@@ -1,5 +1,5 @@
 runtime: java21
-entrypoint: 'java -jar build/libs/soquiz-all.jar'
+entrypoint: 'java -jar build/libs/com.soquiz.server-all.jar'
 
 handlers:
   - url: /.*

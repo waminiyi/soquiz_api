@@ -20,6 +20,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Build the project
+        run: ./gradlew clean build shadowJar
+
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
