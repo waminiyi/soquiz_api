@@ -1,0 +1,9 @@
+runtime: java21
+entrypoint: 'java -jar build/libs/com.soquiz.server-all.jar'
+
+
+env_variables:
+  JWT_SECRET: ${JWT_SECRET}
+  POSTGRES_URL: ${POSTGRES_URL}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

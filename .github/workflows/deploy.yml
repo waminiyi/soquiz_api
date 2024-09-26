@@ -35,9 +35,13 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Verify app.yaml content
+        run: cat app.yaml
+
+
       - name: Deploy to App Engine
         run: |
-          gcloud app deploy src/main/appengine/app.yaml --quiet --version=1 --project=${{ secrets.GCP_PROJECT_ID }}
+          gcloud app deploy app.yaml --quiet --version=1 --project=${{ secrets.GCP_PROJECT_ID }}
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
