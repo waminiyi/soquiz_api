@@ -38,13 +38,22 @@ jobs:
       - name: Verify app.yaml content
         run: cat app.yaml
 
+      - name: Replace placeholders in app.yaml
+        run: |
+          JWT_SECRET=${{ secrets.JWT_SECRET }} 
+          POSTGRES_URL=${{ secrets.POSTGRES_URL }} 
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          sed -i "s/PLACEHOLDER_JWT_SECRET/${JWT_SECRET}/g" app.yaml
+          sed -i "s/PLACEHOLDER_POSTGRES_URL/${POSTGRES_URL}/g" app.yaml
+          sed -i "s/PLACEHOLDER_POSTGRES_USER/${POSTGRES_USER}/g" app.yaml
+          sed -i "s/PLACEHOLDER_POSTGRES_PASSWORD/${POSTGRES_PASSWORD}/g" app.yaml
+
+      - name: Verify app.yaml content
+        run: cat app.yaml
 
 
       - name: Deploy to App Engine
         run: |
           gcloud app deploy app.yaml --quiet --version=1 --project=${{ secrets.GCP_PROJECT_ID }}
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
