@@ -27,13 +27,26 @@ repositories {
 
 configure<AppEngineAppYamlExtension> {
     stage {
-        setArtifact("build/libs/${project.name}-all.jar")
+        setArtifact("build/libs/soquiz-all.jar")
     }
     deploy {
         version = "GCLOUD_CONFIG"
         projectId = "GCLOUD_CONFIG"
     }
 }
+
+tasks {
+    shadowJar {
+        archiveBaseName.set("soquiz")
+        archiveClassifier.set("all")
+        archiveVersion.set("")
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
+}
+
 
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:3.0.0-rc-1")
