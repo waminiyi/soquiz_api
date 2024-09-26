@@ -48,6 +48,10 @@ jobs:
 
       - name: Deploy to App Engine
         run: |
+          echo "JWT_SECRET: ${{ secrets.JWT_SECRET }}"
+          echo "POSTGRES_URL: $POSTGRES_URL"
+          echo "POSTGRES_USER: $POSTGRES_USER"
+          echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
           gcloud app deploy app.yaml --quiet --version=1 --project=${{ secrets.GCP_PROJECT_ID }}
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
