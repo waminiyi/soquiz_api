@@ -22,7 +22,7 @@ It’s designed to be lightweight, secure, and easy to integrate.
 
 Before you can run the API, make sure you have the following installed:
 
-- [Java 20](https://www.oracle.com/java/technologies/javase/jdk20-archive-downloads.html)
+- [Java 21](https://www.oracle.com/java/technologies/javase/jdk20-archive-downloads.html)
 - [Gradle 8.5 or higher](https://gradle.org/install/)
 - [Set up the PostgreSQL database](https://www.postgresql.org/download/)
 - [Docker](https://www.docker.com/) (optional, if you use Docker for PostgreSQL)
