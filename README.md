@@ -11,7 +11,6 @@ for database interactions, and JWT for authentication.
 - [Prerequisites](#prerequisites)
 - [Install and Run](#install-and-run)
 - [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Getting Started
@@ -32,10 +31,10 @@ Before you can run the API, make sure you have the following installed:
 
 1. Clone this repository
 2. Add the following to your environment:
-   POSTGRES_USER=your_postgres_user
-   POSTGRES_PASSWORD=your_postgres_password
-   POSTGRES_URL=jdbc:postgresql://localhost:5432/your_db_name
-   JWT_SECRET=your_jwt_secret
+   - POSTGRES_USER=your_postgres_user
+   - POSTGRES_PASSWORD=your_postgres_password
+   - POSTGRES_URL=jdbc:postgresql://localhost:5432/your_db_name
+   - JWT_SECRET=your_jwt_secret
 3. Build and run
 
 ## API endpoints
